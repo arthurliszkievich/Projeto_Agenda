@@ -7,16 +7,25 @@ from contact.models import Category
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ("first_name", "last_name", "email", "phone", "created_date")
+    list_display = (
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "created_date",
+        "show",
+    )
     ordering = ("id",)
     list_filter = ("created_date",)
     search_fields = ("id", "first_name", "last_name", "email", "phone")
     list_per_page = 10
     list_max_show_all = 50
-    list_editable = ("phone",)
+    list_editable = ("first_name", "last_name", "phone", "show")
+    list_display_links = ("id",)
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
     ordering = ("id",)
-   
