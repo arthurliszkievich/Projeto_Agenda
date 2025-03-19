@@ -59,6 +59,7 @@
     padding: var(--spacing);
     box-shadow: 0 5px 10px 2px var(--clr-dark-shadow-20);
     z-index: 1;
+    text-align: center;
     position: relative;
   }
   
