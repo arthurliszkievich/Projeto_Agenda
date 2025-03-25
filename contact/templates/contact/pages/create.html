@@ -3,14 +3,14 @@
 {% block content %}
   <div class="form-wrapper">
 
-    <h1>Registro de Usuário</h1>
+    <h1>Registro de Usuário</h1>  <!-- Título genérico, ok para create e update -->
 
-    <form 
-      action="{% url 'contact:create' %}"
+    <form
+      action="{{ form_action }}"  
       method="POST"
       enctype="multipart/form-data"
     >
-      {% csrf_token %}      
+      {% csrf_token %}
 
       <div class="form-content">
 
@@ -39,7 +39,7 @@
 
       <div class="form-content">
         <div class="form-group">
-          <button class="btn" type="submit">Send</button>
+          <button class="btn" type="submit">Salvar</button>  <!-- Ou "Salvar" -->
         </div>
       </div>
 
