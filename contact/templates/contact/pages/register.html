@@ -1,0 +1,36 @@
+{% extends 'global/base.html' %}
+{% block content %}
+    <div class="form-wrapper">
+        <h2>Register</h2>
+        <form action="{{ form_action }}" {# Action vindo da view #}
+            method="POST"
+            >
+            {% csrf_token %} {# ESSENCIAL para segurança #}
+            <div class="form-content">
+                {% for field in form %}
+                    {# Loop pelos campos do formulário #}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }} {# Renderiza o input apropriado #}
+                        {{ field.errors }} {# Mostra erros do campo #}
+                        {% if field.help_text %}<p class="help-text">{{ field.help_text }}</p>{% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% if form.non_field_errors %}
+                {# Mostra erros que não são de um campo específico #}
+                <div class="form-content">
+                    <div class="form-group">
+                        <div class="message error">{{ form.non_field_errors }}</div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="form-content">
+                <div class="form-group">
+                    <button class="btn" type="submit">Send</button>
+                    {# Botão de envio #}
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
