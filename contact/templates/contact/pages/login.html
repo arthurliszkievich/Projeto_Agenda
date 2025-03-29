@@ -1,0 +1,26 @@
+{% extends 'global/base.html' %}
+{% block content %}
+    <div class="form-wrapper">
+        <h2>Login</h2>
+        {% if user.is_authenticated %}
+        <form action="{% url 'contact:logout' %}"
+                  method="POST"
+                  style="display: inline;
+                         margin: 0;
+                         padding: 0">
+
+                {% csrf_token %}
+                {# Adapte as classes do botão ao seu CSS (ex: btn-link para parecer link) #}
+                <button type="submit"
+                        class="btn btn-link"
+                        style="border:none;
+                               background:none;
+                               padding:0;
+                               text-decoration: underline;
+                               cursor: pointer;
+                               color: blue">Logout</button>
+            </form>
+        {% endif %}
+        {% include "contact/partials/_user-form.html" %}
+    </div>
+{% endblock content %}

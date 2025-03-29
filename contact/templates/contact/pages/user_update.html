@@ -1,0 +1,10 @@
+{# contact/templates/contact/pages/user_update.html #}
+{% extends 'global/base.html' %}
+{% block content %}
+    <div class="form-wrapper">
+        <h2>Atualizar Perfil</h2>
+        {# Inclui o mesmo formulário parcial usado no register #}
+        {# A view passará a instância correta do RegisterUpdateForm #}
+        {% include "contact/partials/_user-form.html" %}
+    </div>
+{% endblock content %}

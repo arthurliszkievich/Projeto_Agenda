@@ -24,8 +24,7 @@ def update(request, contact_id):
     form_action = reverse("contact:update", args=(contact_id,))
 
     if request.method == "POST":
-        form = ContactForm(
-            request.POST, files=request.FILES or None, instance=contact)
+        form = ContactForm(request.POST, files=request.FILES or None, instance=contact)
         context = {"form": form, "form_action": form_action}
 
         if form.is_valid():
@@ -56,5 +55,5 @@ def delete(request, contact_id):
         {
             "contact": contact,
             "confirmation": confirmation,
-        }
+        },
     )

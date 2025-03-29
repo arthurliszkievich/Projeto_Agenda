@@ -131,6 +131,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOGIN_URL = 'contact:login'
+
+LOGIN_REDIRECT_URL = 'contact:index'
+LOGOUT_REDIRECT_URL = 'contact:login'
+
+
 try:
     from project.local_settings import *
 except ImportError:
