@@ -91,15 +91,15 @@
   }
   
   .menu-link {
-  display: block;
-  padding: var(--spacing);
-  color: var(--link-light-color);
-  text-decoration: none;
-  transition: background-color var(--transition-fast) ease-in-out;
-  border-radius: var(--default-border-radius);
-  line-height: 1; 
-  background: transparent;
-  vertical-align: middle;
+    display: inline-block; /* Mudar para inline-block */
+    padding: var(--spacing);
+    color: var(--link-light-color);
+    text-decoration: none;
+    transition: background-color var(--transition-fast) ease-in-out;
+    border-radius: var(--default-border-radius);
+    line-height: 1; 
+    background: transparent;
+    vertical-align: middle;
   }
   
   .menu-item form {
