@@ -2,8 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from contact.models import Contact
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url="contact:login")
 def index(request):
     contacts = Contact.objects.filter(show=True).order_by("-id")
 
@@ -32,6 +34,7 @@ def contact(request, contact_id):
     return render(request, "contact/pages/contact.html", context)
 
 
+@login_required(login_url='contact:login')
 def search(request):
 
     search_value = request.GET.get("q", "").strip()

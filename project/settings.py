@@ -137,6 +137,8 @@ LOGIN_REDIRECT_URL = 'contact:index'
 LOGOUT_REDIRECT_URL = 'contact:login'
 
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 try:
     from project.local_settings import *
 except ImportError:

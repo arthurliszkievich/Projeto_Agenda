@@ -61,6 +61,7 @@
     z-index: 1;
     text-align: center;
     position: relative;
+
   }
   
   .header-heading {
@@ -90,14 +91,24 @@
   }
   
   .menu-link {
-    display: block;
-    padding: var(--spacing);
-    color: var(--link-light-color);
-    text-decoration: none;
-    transition: background-color var(--transition-fast) ease-in-out;
-    border-radius: var(--default-border-radius);
+  display: block;
+  padding: var(--spacing);
+  color: var(--link-light-color);
+  text-decoration: none;
+  transition: background-color var(--transition-fast) ease-in-out;
+  border-radius: var(--default-border-radius);
+  line-height: 1; 
+  background: transparent;
+  vertical-align: middle;
   }
   
+  .menu-item form {
+    display: inline; /* Mantém o form inline */
+    margin: 0;
+    padding: 0;
+    vertical-align: middle; /* Ajuda a alinhar o form com o texto ao redor */
+}
+
   .menu-link:hover {
     background: var(--clr-light-shadow-10);
   }
