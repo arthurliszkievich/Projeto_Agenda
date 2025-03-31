@@ -26,8 +26,7 @@ def register(request):
     return render(request, "contact/pages/register.html", {"form": form})
 
 
-# --- View de Atualização de Usuário (PROTEGIDA) ---
-@login_required  # <--- ESSENCIAL: Garante que só usuários logados acessem
+@login_required(login_url='contact:login')
 def user_update(request):
     # Lógica do POST primeiro
     if request.method == "POST":
@@ -37,16 +36,13 @@ def user_update(request):
             form.save()  # Assume que form.save() lida com hash da senha se alterada
             messages.success(
                 request, 'Seus dados foram atualizados com sucesso!')
-            # Redireciona para a mesma página após sucesso (Padrão PRG)
-            return redirect("contact:user_update")
+            return redirect("contact:login")
         # else: Se o form POST for inválido, a view continua e renderiza o mesmo form com erros abaixo
     else:  # Se for GET
         # Cria o formulário preenchido com os dados do usuário logado
         form = RegisterUpdateForm(instance=request.user)
 
-    # Renderiza o template (seja GET ou POST inválido)
-    # **RECOMENDAÇÃO:** Use um template diferente para update, ex: user_update.html
-    return render(request, "contact/pages/register.html", {"form": form})
+    return render(request, "contact/pages/user_update.html", {"form": form})
 
 
 # --- View de Login ---
