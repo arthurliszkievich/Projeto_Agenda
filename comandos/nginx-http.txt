@@ -1,0 +1,101 @@
+# https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
+#
+# REPLACES
+# 35.192.139.169 = Replace with your domain
+# \home\windows\agendaapp = Replace with the path to the folder for the project
+# \home\windows\agendaapp\static = Replace with the path to the folder for static files
+# \home\windows\agendaapp\media = Replace with the path to the folder for media files
+# agenda = Replace with your unix socket name (don't add .socket)
+# 
+# Set timezone
+# List - timedatectl list-timezones
+# sudo timedatectl set-timezone America/Sao_Paulo
+
+
+# Configuração Nginx para Aplicação Django via Gunicorn
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name 35.192.139.169; 
+
+    # Opcional: Limite para tamanho de uploads
+    client_max_body_size 30M; # 
+
+    # --- Servir Arquivos Estáticos Diretamente ---
+    # Localização: Deve corresponder ao STATIC_URL do Django
+    # Alias: Deve apontar para o diretório STATIC_ROOT onde 'collectstatic' copia os arquivos
+    location /static/ {
+        alias /home/windows/agendaapp/static/; # Use barras normais e termine com '/'
+        expires 30d;                         # Cache no navegador
+        add_header Cache-Control "public";   # Define como cache público
+    }
+
+    # --- Servir Arquivos de Mídia Diretamente ---
+    # Localização: Deve corresponder ao MEDIA_URL do Django
+    # Alias: Deve apontar para o diretório MEDIA_ROOT definido no Django
+    location /media/ {
+        alias /home/windows/agendaapp/media/;  # Use barras normais e termine com '/'
+        expires 30d;                         # Cache no navegador
+        add_header Cache-Control "public";   # Define como cache público
+    }
+
+    # --- Proxy para Aplicação Gunicorn/Django ---
+    # Captura todas as outras requisições
+    location / {
+        # Headers essenciais para o backend saber a origem da requisição
+        proxy_set_header Host $host;                      # Domínio original solicitado
+        proxy_set_header X-Real-IP $remote_addr;           # IP real do cliente
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; # Lista de IPs (se houver outros proxies)
+        proxy_set_header X-Forwarded-Proto $scheme;        # Protocolo original (http ou https)
+
+        # Aponta para o socket Unix criado pelo Gunicorn/Systemd
+        # Verifique se o nome 'agenda.socket' está correto
+        proxy_pass http://unix:/run/agenda.socket;
+
+        # Headers adicionais (geralmente para WebSockets, mas podem ficar)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # --- Configurações Adicionais ---
+
+    # Bloco para negar acesso a arquivos .ht (segurança)
+    location ~ /\.ht {
+        deny all;
+    }
+
+    # Bloco para negar acesso a arquivos ocultos (segurança)
+    location ~ /\. {
+        access_log off;
+        log_not_found off;
+        deny all;
+    }
+
+    # Configurações de compressão Gzip (performance)
+    gzip on;
+    gzip_disable "msie6"; # Desabilita para IE6 antigo
+    gzip_comp_level 6;     # Nível de compressão (1-9)
+    gzip_min_length 1100;  # Tamanho mínimo para comprimir
+    gzip_buffers 4 32k;    # Buffers para compressão
+    gzip_proxied any;      # Comprime respostas de proxies
+    gzip_types             # Tipos de arquivos a comprimir
+      text/plain
+      text/css
+      text/js
+      text/xml
+      text/javascript
+      application/javascript
+      application/x-javascript
+      application/json
+      application/xml
+      application/rss+xml
+      image/svg+xml;
+
+    # Configuração de Logs
+    access_log off; # Desabilita log de acesso (pode habilitar para debug)
+    # access_log /var/log/nginx/35.192.139.169-access.log; # Nome do arquivo de log de acesso
+    error_log  /var/log/nginx/35.192.139.169-error.log;   # Nome do arquivo de log de erro
+}
