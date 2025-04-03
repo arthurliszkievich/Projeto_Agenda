@@ -1,3 +1,7 @@
+#Logs
+*.log
+gunicorn-error-log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -298,3 +302,10 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+
+# Editor Backup Files (Nano, Vim, etc.)
+*.save
+*.save.*
+*~
+*.swp
