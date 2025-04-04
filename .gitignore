@@ -167,6 +167,7 @@ __pycache__
 db.sqlite3
 media/
 static/
+gunicorn-error-log
 
 # Backup files # 
 *.bak 
