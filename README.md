@@ -4,7 +4,7 @@
 
 Uma aplicação web desenvolvida com Django para gerenciamento de contatos pessoais. Permite aos usuários cadastrar, criar, visualizar, editar, buscar e apagar seus contatos, organizando-os por categorias e adicionando fotos.
 
-> **Status:** Em desenvolvimento / Manutenção 
+> **Status:** Concluido
 
 ## Funcionalidades Principais
 
