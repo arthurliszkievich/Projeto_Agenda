@@ -151,12 +151,11 @@ LOGIN_URL = "contact:login"
 LOGIN_REDIRECT_URL = "contact:index"
 LOGOUT_REDIRECT_URL = "contact:login"
 
-
 # Sessão expira quando o navegador fecha (para navegadores que respeitam)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Define um tempo máximo de inatividade em segundos (ex: 1 hora)
-SESSION_COOKIE_AGE = 1
+SESSION_COOKIE_AGE = 3600
 
 # Reseta o tempo de expiração a cada requisição do usuário
 SESSION_SAVE_EVERY_REQUEST = True
