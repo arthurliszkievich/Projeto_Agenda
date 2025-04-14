@@ -152,7 +152,14 @@ LOGIN_REDIRECT_URL = "contact:index"
 LOGOUT_REDIRECT_URL = "contact:login"
 
 
+# Sessão expira quando o navegador fecha (para navegadores que respeitam)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Define um tempo máximo de inatividade em segundos (ex: 1 hora)
+SESSION_COOKIE_AGE = 1
+
+# Reseta o tempo de expiração a cada requisição do usuário
+SESSION_SAVE_EVERY_REQUEST = True
 
 try:
     from project.local_settings import *
