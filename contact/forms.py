@@ -151,7 +151,6 @@ class ContactForm(forms.ModelForm):
                         code="max_length",
                     ),
                 )
-            # Cuidado com vírgula dentro da string
             forbidden_words = ["Bobão", "Henry", "Boboca", "Bobao"]
             for word in forbidden_words:
                 if word.lower() in description.lower():
@@ -169,7 +168,7 @@ class ContactForm(forms.ModelForm):
 class RegisterForm(UserCreationForm):
 
     # --- Definições Explícitas dos Campos ---
-    username = forms.CharField(  # Adicionado campo username
+    username = forms.CharField(
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
@@ -219,15 +218,13 @@ class RegisterForm(UserCreationForm):
         error_messages={"required": "Informe um e-mail valido."},
     )
 
-    # --- Classe Meta (DEPOIS dos campos explícitos) ---
     class Meta:
         model = User
         fields = (
-            "username",  # Adicionado username
+            "username",
             "first_name",
             "last_name",
-            "email",
-            # Removido password1 e password2 daqui, UserCreationForm cuida deles
+
         )
 
     # --- Métodos Clean ---
@@ -262,19 +259,23 @@ class RegisterUpdateForm(forms.ModelForm):
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control"}),
         label="Primeiro Nome",
-        min_length=3, max_length=30, required=True,
+        min_length=3,
+        max_length=30,
+        required=True,
         error_messages={
             "required": "Este campo é obrigatório.",
             "min_length": "Mínimo de 3 caracteres.",
-        }
+        },
     )
     last_name = forms.CharField(
         widget=forms.TextInput(attrs={"class": "form-control"}),
         label="Sobrenome",
-        min_length=3, max_length=30, required=False,  # Opcional
+        min_length=3,
+        max_length=30,
+        required=False,  # Opcional
         error_messages={
             "min_length": "Mínimo de 3 caracteres.",
-        }
+        },
     )
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={"class": "form-control"}),
@@ -282,8 +283,8 @@ class RegisterUpdateForm(forms.ModelForm):
         required=True,
         error_messages={
             "required": "Este campo é obrigatório.",
-            "invalid": "Por favor, insira um e-mail valido."
-        }
+            "invalid": "Por favor, insira um e-mail valido.",
+        },
     )
     # Adiciona o campo username DEPOIS do email
     username = forms.CharField(
@@ -294,7 +295,7 @@ class RegisterUpdateForm(forms.ModelForm):
         ),
         label="Usuário",
         required=True,
-        help_text="Pode ser alterado."
+        help_text="Pode ser alterado.",
     )
 
     password1 = forms.CharField(
@@ -315,8 +316,7 @@ class RegisterUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email",
-                  "username")
+        fields = ("first_name", "last_name", "email", "username")
 
     def clean(self):
         cleaned_data = super().clean()
@@ -327,21 +327,28 @@ class RegisterUpdateForm(forms.ModelForm):
         # O password2 é a confirmação de senha.
         if password1 or password2:
             if password1 != password2:
-                self.add_error('password2', ValidationError(
-                    "As senhas digitadas não coincidem.", code='password_mismatch'
-                ))
+                self.add_error(
+                    "password2",
+                    ValidationError(
+                        "As senhas digitadas não coincidem.", code="password_mismatch"
+                    ),
+                )
 
             # Se as senhas coincidirem E password1 não estiver vazia, validar a força
-            elif password1:  # Garante que temos uma senha para validar e que ela coincidiu
+            elif (
+                password1
+            ):  # Garante que temos uma senha para validar e que ela coincidiu
                 try:
                     # Usa a instância do usuário (se for update) para contexto na validação
-                    user_instance = self.instance if self.instance and self.instance.pk else None
+                    user_instance = (
+                        self.instance if self.instance and self.instance.pk else None
+                    )
                     password_validation.validate_password(
                         password1, user=user_instance)
                 except ValidationError as errors:
                     # Adiciona os erros de validação de senha ao campo password1
                     # Passa o objeto de erro diretamente
-                    self.add_error('password1', errors)
+                    self.add_error("password1", errors)
 
         # 4. Retornar sempre o dicionário cleaned_data
         return cleaned_data
@@ -364,7 +371,16 @@ class RegisterUpdateForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if email and self.instance.email != email:
-            if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
-                self.add_error("email", ValidationError(
-                    "Este e-mail já está cadastrado por outro usuário.", code="duplicate_email"))
+            if (
+                User.objects.filter(email__iexact=email)
+                .exclude(pk=self.instance.pk)
+                .exists()
+            ):
+                self.add_error(
+                    "email",
+                    ValidationError(
+                        "Este e-mail já está cadastrado por outro usuário.",
+                        code="duplicate_email",
+                    ),
+                )
         return email

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from contact.models import Contact
 from contact.forms import ContactForm
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages  # Importe o messages
+from django.contrib import messages
 
 
 @login_required(login_url="contact:login")
@@ -17,7 +17,7 @@ def create(request):
             contact = form.save(commit=False)
             contact.owner = request.user
             contact.save()
-            messages.success(request, 'Contato criado com sucesso!')
+            messages.success(request, "Contato criado com sucesso!")
             # 3. REDIRECIONAR após sucesso (para a página de update, por exemplo)
             return redirect("contact:update", contact_id=contact.pk)
         # Se o form NÃO for válido no POST, o código continua e vai renderizar o form com erros abaixo
@@ -35,8 +35,6 @@ def create(request):
     # 6. Renderizar o template (acontece no GET ou se o POST for inválido)
     return render(request, "contact/pages/create.html", context)
 
-# --- Sua view update parece correta ---
-
 
 @login_required(login_url="contact:login")
 def update(request, contact_id):
@@ -47,50 +45,45 @@ def update(request, contact_id):
     if request.method == "POST":
         form = ContactForm(
             request.POST, files=request.FILES or None, instance=contact)
-        # Removi a linha context = ... daqui, vamos definir só uma vez
         if form.is_valid():
             form.save()
             # Adicionar mensagem
-            messages.success(request, 'Contato atualizado com sucesso!')
-            # Redirecionar para a mesma página de update após salvar é comum
+            messages.success(request, "Contato atualizado com sucesso!")
+            # Redirecionar para a mesma página de update
             return redirect("contact:update", contact_id=contact.pk)
         # Se inválido, cai para o render abaixo
     else:
-        # GET request: preencher form com dados da instância
         form = ContactForm(instance=contact)
 
-    # Contexto definido aqui para GET ou POST inválido
     context = {
-        "form": form,  # Form com dados (GET) ou com erros (POST inválido)
+        "form": form,
         "form_action": form_action,
     }
-    # Renderiza para GET ou POST inválido
-    # Usa o mesmo template? Ok.
     return render(request, "contact/pages/create.html", context)
 
-# --- Sua view delete parece correta ---
 
-
-@login_required(login_url="contact:login")
+@login_required(login_url='contact:login')
 def delete(request, contact_id):
-    # ... (código parece ok) ...
+    # Busca o contato ou retorna 404, garantindo que pertence ao usuário
     contact = get_object_or_404(
-        Contact, pk=contact_id, show=True, owner=request.user)
+        Contact, pk=contact_id, owner=request.user, show=True)
 
-    confirmation = request.POST.get("confirmation", "no")
+    if request.method == 'POST':
+        try:
+            contact_name = f"{contact.first_name} {contact.last_name}".strip()
+            contact.delete()
+            messages.success(
+                request, f'Contato "{contact_name}" apagado com sucesso!')
+            # SEMPRE redireciona após um POST bem-sucedido
+            return redirect('contact:index')
+        except Exception as e:
+            # Em caso de erro inesperado ao deletar
+            messages.error(
+                request, f'Ocorreu um erro ao tentar apagar o contato: {e}')
+            # Redireciona de volta para a página de detalhes
+            return redirect('contact:detail', contact_id=contact_id)
 
-    if confirmation == "yes":
-        contact.delete()
-        # Adicionar mensagem
-        messages.success(request, 'Contato apagado com sucesso!')
-        return redirect("contact:index")
-
-    # Renderiza a página de detalhe com o botão de confirmação
-    return render(
-        request,
-        "contact/pages/contact.html",  # Template de detalhe, não create
-        {
-            "contact": contact,
-            "confirmation": confirmation,
-        },
-    )
+    # Se o método NÃO for POST (ex: alguém tentando acessar a URL /delete/ diretamente via GET)
+    messages.error(request, 'Operação não permitida.')
+    # Redireciona de volta para os detalhes
+    return redirect('contact:detail', contact_id=contact_id)

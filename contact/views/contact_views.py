@@ -34,7 +34,7 @@ def contact(request, contact_id):
     return render(request, "contact/pages/contact.html", context)
 
 
-@login_required(login_url='contact:login')
+@login_required(login_url="contact:login")
 def search(request):
 
     search_value = request.GET.get("q", "").strip()

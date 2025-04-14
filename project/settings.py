@@ -79,21 +79,21 @@ WSGI_APPLICATION = "project.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-DB_ENGINE = os.getenv('DB_ENGINE', 'django.db.backends.sqlite3')
-DB_NAME = os.getenv('DB_NAME', BASE_DIR / "db.sqlite3")
-DB_USER = os.getenv('DB_USER', None)
-DB_PASSWORD = os.getenv('DB_PASSWORD', None)
-DB_HOST = os.getenv('DB_HOST', None)
-DB_PORT = os.getenv('DB_PORT', None)
+DB_ENGINE = os.getenv("DB_ENGINE", "django.db.backends.sqlite3")
+DB_NAME = os.getenv("DB_NAME", BASE_DIR / "db.sqlite3")
+DB_USER = os.getenv("DB_USER", None)
+DB_PASSWORD = os.getenv("DB_PASSWORD", None)
+DB_HOST = os.getenv("DB_HOST", None)
+DB_PORT = os.getenv("DB_PORT", None)
 
 DATABASES = {
-    'default': {
-        'ENGINE': DB_ENGINE,
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
+    "default": {
+        "ENGINE": DB_ENGINE,
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASSWORD,
+        "HOST": DB_HOST,
+        "PORT": DB_PORT,
     }
 }
 
@@ -146,10 +146,10 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_URL = 'contact:login'
+LOGIN_URL = "contact:login"
 
-LOGIN_REDIRECT_URL = 'contact:index'
-LOGOUT_REDIRECT_URL = 'contact:login'
+LOGIN_REDIRECT_URL = "contact:index"
+LOGOUT_REDIRECT_URL = "contact:login"
 
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

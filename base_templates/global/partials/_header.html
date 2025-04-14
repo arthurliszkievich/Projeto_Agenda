@@ -10,45 +10,50 @@
                 <li class="menu-item">
                     {# Link para a página de Contatos #}
                     <a href="{% url "contact:create" %}" class="menu-link">Criar Contato</a>
-                </li> 
+                </li>
                 <li class="menu-item">
                     {# Link para atualizar o PERFIL do usuário logado #}
                     <a href="{% url "contact:user_update" %}" class="menu-link">Profile</a>
                 </li>
                 <li class="menu-item">
                     {# Formulário de Logout (método POST) #}
-                    <form action="{% url 'contact:logout' %}" method="POST" style="display: inline;">
+                    <form action="{% url 'contact:logout' %}"
+                          method="POST"
+                          style="display: inline">
                         {% csrf_token %}
-                        <button type="submit" class="menu-link" style="border:none; cursor:pointer; font: inherit;">Logout</button>
+                        <button type="submit"
+                                class="menu-link"
+                                style="border:none;
+                                       cursor:pointer;
+                                       font: inherit">Logout</button>
                     </form>
                 </li>
-                </li>
-            {% else %}
-                {# Links para usuários NÃO logados #}
-                <li class="menu-item">
-                    {# Link para a página de Login #}
-                    <a href="{% url "contact:login" %}" class="menu-link">Login</a>
-                </li>
-                <li class="menu-item">
-                    {# Link para a página de Registro #}
-                    <a href="{% url "contact:register" %}" class="menu-link">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    {# --- CONDIÇÃO PARA EXIBIR A BARRA DE BUSCA --- #}
-    {# Verifica se o nome completo da view atual NÃO é 'contact:login' E NÃO é 'contact:register' #}
-    {% if request.resolver_match.view_name != 'contact:login' and request.resolver_match.view_name != 'contact:register' %}
-        <div class="search">
-            <form action="{% url "contact:search" %}" method="GET" class="search-form">
-                <input type="search"
-                       class="search-input"
-                       placeholder="Search"
-                       id="search"
-                       name="q"
-                       value="{{ request.GET.q.strip }}">
-            </form>
-        </div>
-    {% endif %}
+            </li>
+        {% else %}
+            {# Links para usuários NÃO logados #}
+            <li class="menu-item">
+                {# Link para a página de Login #}
+                <a href="{% url "contact:login" %}" class="menu-link">Login</a>
+            </li>
+            <li class="menu-item">
+                {# Link para a página de Registro #}
+                <a href="{% url "contact:register" %}" class="menu-link">Register</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{# --- CONDIÇÃO PARA EXIBIR A BARRA DE BUSCA --- #}
+{# Verifica se o nome completo da view atual NÃO é 'contact:login' E NÃO é 'contact:register' #}
+{% if request.resolver_match.view_name != 'contact:login' and request.resolver_match.view_name != 'contact:register' %}
+    <div class="search">
+        <form action="{% url "contact:search" %}" method="GET" class="search-form">
+            <input type="search"
+                   class="search-input"
+                   placeholder="Search"
+                   id="search"
+                   name="q"
+                   value="{{ request.GET.q.strip }}">
+        </form>
+    </div>
+{% endif %}
 </header>

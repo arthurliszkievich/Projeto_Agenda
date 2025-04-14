@@ -33,8 +33,7 @@ class Contact(models.Model):
         return f"{self.first_name} {self.last_name}"
 
     def clean(self):
-        super().clean()  # Chame super().clean() em models também
-
+        super().clean()
         if self.first_name and self.last_name and self.first_name == self.last_name:
             raise ValidationError(
                 "O primeiro nome e o sobrenome não podem ser iguais.")

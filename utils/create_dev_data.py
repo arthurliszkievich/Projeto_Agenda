@@ -28,6 +28,7 @@ django.setup()
 if __name__ == "__main__":
     import faker
     from contact.models import Category, Contact
+
     # É importante importar faker e models AQUI se o setup estiver fora do if
 
     print("Deleting existing Categories and Contacts...")
@@ -39,9 +40,12 @@ if __name__ == "__main__":
     fake = faker.Faker("pt_BR")
 
     print("Creating Categories...")
-    category_names = ["Amigos", "Família", "Conhecidos",]
-    django_categories_instances = [
-        Category(name=name) for name in category_names]
+    category_names = [
+        "Amigos",
+        "Família",
+        "Conhecidos",
+    ]
+    django_categories_instances = [Category(name=name) for name in category_names]
     # Usar bulk_create aqui também
     Category.objects.bulk_create(django_categories_instances)
     print(f"{len(category_names)} Categories created.")
@@ -62,7 +66,7 @@ if __name__ == "__main__":
         email = profile["mail"]
         # Adicionar um pequeno número ao email para aumentar a chance de ser único
         # numa execução com menos de 1000, se faker repetir emails.
-        email_parts = email.split('@')
+        email_parts = email.split("@")
         email = f"{email_parts[0]}{i}@{email_parts[1]}"
 
         first_name, last_name = profile["name"].split(" ", 1)
